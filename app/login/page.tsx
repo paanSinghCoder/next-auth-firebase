@@ -31,12 +31,26 @@ const Login = () => {
         const res: SignInResponse | undefined = await signIn("credentials", {
           email: creds.email,
           password: creds.password,
-          redirect: true,
+          redirect: false,
           callbackUrl: "/dashboard",
         });
+
+        if (res?.status === 401) {
+          toast.error("Invalid email/password");
+          return;
+        }
+
+        if (res?.status === 500) {
+          toast.error("Something went wrong");
+          return;
+        }
+
+        if (res?.ok) {
+          redirect("/dashboard");
+        }
       }
     } catch (error: any) {
-      toast.error(error.message);
+      toast(error.message);
       console.log(error);
     }
   };

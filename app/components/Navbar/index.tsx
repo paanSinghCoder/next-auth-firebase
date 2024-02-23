@@ -55,7 +55,7 @@ const Navbar = () => {
 const getNavAuthButtons = (session: any) => {
   const { status } = session;
 
-  if (status === "loading") return <h1>⭑⭑⭑</h1>;
+  if (status === "loading") return <h1>...</h1>;
 
   if (status === "unauthenticated")
     return (
