@@ -42,7 +42,11 @@ const Login = () => {
   };
 
   if (session?.status === "loading") {
-    return <h1>Loading...</h1>;
+    return (
+      <div className="text-md mt-8 w-full h-full flex items-center justify-center">
+        Loading...
+      </div>
+    );
   }
 
   if (session?.status === "authenticated") {
