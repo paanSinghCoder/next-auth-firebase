@@ -11,7 +11,7 @@ const Navbar = () => {
         <div className="flex-1 flex items-center">
           <Link
             href="/"
-            className="text-md flex items-center gap-1 font-bold cursor-pointer"
+            className="text-sm flex items-center gap-1 font-semibold cursor-pointer"
           >
             ⚡ Next-Auth-Firebase
           </Link>
