@@ -14,6 +14,7 @@ const Dashboard = () => {
       <div className="">
         <div className="mx-auto max-w-6xl">
           <div>{session?.data?.user?.name}</div>
+          <div>{session?.data?.user?.email}</div>
         </div>
       </div>
     </div>
