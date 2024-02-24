@@ -22,7 +22,7 @@ const Login = () => {
           creds.password
         );
 
-        console.log("RES after signup: ", res.user.uid);
+        console.log("RES after signup: ", res);
 
         await setDoc(doc(db, "users", res.user.uid), {
           name: creds.name.trim() || "Unnamed user",

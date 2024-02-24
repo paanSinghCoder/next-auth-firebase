@@ -114,6 +114,10 @@ export const authOptions: AuthOptions = {
       session.user = token.user;
       session.accessToken = token.accessToken;
       session.error = token.error;
+      session.accessTokenExpires = token.accessTokenExpires;
+      session.refreshToken = token.refreshToken;
+
+      console.log("Session in route: ", session);
 
       return session;
     },
@@ -121,7 +125,20 @@ export const authOptions: AuthOptions = {
   pages: { signIn: "/login", signOut: "/login" },
   session: {
     strategy: "jwt",
-    maxAge: 1800,
+    /*
+     * Set maxAge to 30 minutes.
+     * The user will be logged out after 30 minutes of inactivity.
+     * Timer resets on user activity.
+     */
+    maxAge: 1800, // 30 minutes in seconds
+    // maxAge: 60,
+  },
+  jwt: {
+    /*
+     * Set maxAge to 60 minutes.
+     * The user will be logged out after 60 minutes irrespective of idle or not.
+     */
+    maxAge: 3600, // 1 hour in seconds
   },
 };
 
