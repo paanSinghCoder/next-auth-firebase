@@ -1,10 +1,21 @@
 "use client";
 
-import { useSession } from "next-auth/react";
-import { Suspense } from "react";
+import { signOut, useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
+import { Suspense, useEffect } from "react";
+import toast from "react-hot-toast";
 
 const Dashboard = () => {
-  const session = useSession();
+  const session: any = useSession();
+  const router = useRouter();
+
+  useEffect(() => {
+    if (session?.error === "RefreshAccessTokenError") {
+      signOut();
+      toast("Refresh token expired. Please login.");
+      router.replace("/login");
+    }
+  }, [session]);
 
   if (session?.status === "loading") {
     return (
@@ -13,8 +24,6 @@ const Dashboard = () => {
       </div>
     );
   }
-
-  console.log("session dashboard: ", session);
 
   return (
     <Suspense fallback="Loading...">

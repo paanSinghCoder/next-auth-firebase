@@ -27,6 +27,8 @@ const Login = () => {
         await setDoc(doc(db, "users", res.user.uid), {
           name: creds.name.trim() || "Unnamed user",
           email: creds.email.trim(),
+          image: "",
+          emailVerified: false,
         });
 
         if (!res?.user) {
