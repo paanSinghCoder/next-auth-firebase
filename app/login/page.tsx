@@ -4,12 +4,13 @@ import { createUserWithEmailAndPassword } from "firebase/auth";
 import { SignInResponse, signIn, useSession } from "next-auth/react";
 import { redirect } from "next/navigation";
 import { FormEventHandler, useState } from "react";
-import { auth } from "../firebase";
+import { auth, db } from "../firebase";
 import toast from "react-hot-toast";
+import { doc, setDoc } from "firebase/firestore";
 
 const Login = () => {
   const session = useSession();
-  const [creds, setCreds] = useState({ email: "", password: "" });
+  const [creds, setCreds] = useState({ name: "", email: "", password: "" });
   const [isRegisterScreen, setRegisterScreen] = useState(true);
 
   const submit: FormEventHandler<HTMLFormElement> = async () => {
@@ -17,9 +18,16 @@ const Login = () => {
       if (isRegisterScreen) {
         const res = await createUserWithEmailAndPassword(
           auth,
-          creds.email,
+          creds.email.trim(),
           creds.password
         );
+
+        console.log("RES after signup: ", res.user.uid);
+
+        await setDoc(doc(db, "users", res.user.uid), {
+          name: creds.name.trim() || "Unnamed user",
+          email: creds.email.trim(),
+        });
 
         if (!res?.user) {
           toast.error("Something went wrong");
@@ -90,10 +98,20 @@ const Login = () => {
         <form
           onSubmit={(e) => {
             e.preventDefault();
-            submit();
+            submit(e);
           }}
           className="flex flex-col gap-4"
         >
+          {isRegisterScreen && (
+            <input
+              value={creds.name}
+              onChange={(e) => setCreds({ ...creds, name: e.target.value })}
+              type="text"
+              required
+              placeholder="Enter Name"
+              className="border rounded-md text-sm px-3 py-2"
+            />
+          )}
           <input
             value={creds.email}
             onChange={(e) => setCreds({ ...creds, email: e.target.value })}
@@ -111,7 +129,11 @@ const Login = () => {
             className="border rounded-md text-sm px-3 py-2"
           />
           <button
-            disabled={!creds.email.trim() || !creds.password.trim()}
+            disabled={
+              !creds.email.trim() ||
+              !creds.password.trim() ||
+              (isRegisterScreen && !creds.name.trim())
+            }
             className="text-sm bg-cyan-700 rounded-md text-white py-2 hover:bg-cyan-800 disabled:bg-slate-200 disabled:text-gray-400"
             type="submit"
           >

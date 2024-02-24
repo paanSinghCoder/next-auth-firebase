@@ -3,8 +3,10 @@ import GoogleProvider from "next-auth/providers/google";
 import CredentialsProvider from "next-auth/providers/credentials";
 import { cert } from "firebase-admin/app";
 import { signInWithEmailAndPassword } from "firebase/auth";
-import { auth } from "../../../firebase";
+import { auth, db } from "../../../firebase";
 import { FirestoreAdapter } from "@auth/firebase-adapter";
+import { getFirestore, doc, getDoc } from "firebase/firestore";
+import { Session, User } from "next-auth";
 
 export const authOptions: AuthOptions = {
   providers: [
@@ -31,6 +33,7 @@ export const authOptions: AuthOptions = {
       },
     }),
   ],
+  // @ts-ignore
   adapter: FirestoreAdapter({
     credential: cert({
       projectId: process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID,
@@ -38,8 +41,17 @@ export const authOptions: AuthOptions = {
       privateKey: process.env.FIREBASE_PRIVATE_KEY!.replace(/\\n/g, "\n"),
     }),
   }),
+
   pages: { signIn: "/login", signOut: "/login" },
-  session: { strategy: "jwt" },
+  session: {
+    strategy: "jwt",
+    /*
+     * Set maxAge to 30 minutes.
+     * The user will be logged out after 30 minutes of inactivity.
+     * Timer resets on user activity.
+     */
+    maxAge: 1800,
+  },
 };
 
 const handler = NextAuth(authOptions);

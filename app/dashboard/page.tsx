@@ -14,6 +14,8 @@ const Dashboard = () => {
     );
   }
 
+  console.log("session dashboard: ", session);
+
   return (
     <Suspense fallback="Loading...">
       <div className="text-center pt-12 mx-auto max-w-6xl">
