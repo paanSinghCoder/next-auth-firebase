@@ -5,7 +5,7 @@ import { cert } from "firebase-admin/app";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth, db } from "../../../firebase";
 import { FirestoreAdapter } from "@auth/firebase-adapter";
-import { getFirestore, doc, getDoc } from "firebase/firestore";
+import { doc, getDoc } from "firebase/firestore";
 
 const GOOGLE_AUTHORIZATION_URL =
   "https://accounts.google.com/o/oauth2/v2/auth?" +
@@ -100,6 +100,15 @@ export const authOptions: AuthOptions = {
           refreshToken: account.refresh_token,
           user,
         };
+      } else if (token.email) {
+        const userRef = doc(db, "users", token.id);
+        const userSnap = await getDoc(userRef);
+
+        if (userSnap.exists()) {
+          const dbUser = userSnap.data();
+          console.log("DB USER HERE", dbUser);
+          token.name = dbUser.name; // Adding name to the user session
+        }
       }
 
       // Return previous token if the access token has not expired yet
