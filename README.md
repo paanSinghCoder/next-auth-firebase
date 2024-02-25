@@ -1,4 +1,10 @@
-## Features:
+# Next-Auth-Firebase
+OAuth (Google) and credentials (email and password) authentication implemented with Next-Auth 4, Firebase, Firestore and NextJS 13.
+
+## Demo
+[https://next-auth-firebase.vercel.app](https://next-auth-firebase.vercel.app)
+
+## Features
 - Next-Auth 4 with Firebase and Typescript
 - Google and Credentials login and signup
 - Token refresh rotation mechanism with Auth timeout
@@ -7,17 +13,18 @@
 - Tailwind CSS
 - Deployed on Vercel
 
-## Notable Files and folders:
-- [...nextauth.ts]/route.ts
-- app/helpers
-- login/page.tsx
-- dashboard.tsx
+## Notable Files and folders
+- `[...nextauth.ts]/route.ts`
+- `app/helpers`
+- `login/page.tsx`
+- `dashboard.tsx`
 
 ## Running on local
 
 - Make sure Node is installed
 
 - Rename `.env.local.example` to `.env.local` and add all the env variables.
+- Generate and add `service-account.json` file in the root of the project. [https://www.youtube.com/watch?v=gb0bytUGDnQ&ab_channel=JieJenn](Youtube)
 
 - Run the development server:
 
