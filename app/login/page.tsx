@@ -8,7 +8,6 @@ import { doc, setDoc } from "firebase/firestore";
 import { redirect } from "next/navigation";
 
 import { auth, db } from "../helpers/firebase";
-import { Transition } from "@headlessui/react";
 
 const Login = () => {
   const session = useSession();
