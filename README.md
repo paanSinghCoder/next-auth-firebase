@@ -2,7 +2,7 @@
 OAuth (Google) and credentials (email and password) authentication implemented with Next-Auth 4, Firebase, Firestore and NextJS 13.
 
 ## Demo
-[https://next-auth-firebase.vercel.app](https://next-auth-firebase.vercel.app)
+[https://next-auth-firebase-ts.vercel.app](https://next-auth-firebase-ts.vercel.app)
 
 ## Features
 - Next-Auth 4 with Firebase and Typescript
