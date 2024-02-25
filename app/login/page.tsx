@@ -1,12 +1,14 @@
 "use client";
 
-import { createUserWithEmailAndPassword } from "firebase/auth";
-import { SignInResponse, signIn, useSession } from "next-auth/react";
-import { redirect } from "next/navigation";
 import { FormEventHandler, useState } from "react";
-import { auth, db } from "../firebase";
+import { createUserWithEmailAndPassword } from "firebase/auth";
 import toast from "react-hot-toast";
+import { SignInResponse, signIn, useSession } from "next-auth/react";
 import { doc, setDoc } from "firebase/firestore";
+import { redirect } from "next/navigation";
+
+import { auth, db } from "../helpers/firebase";
+import { Transition } from "@headlessui/react";
 
 const Login = () => {
   const session = useSession();
@@ -79,7 +81,7 @@ const Login = () => {
 
   return (
     <main className="h-full pt-20 w-full flex items-center justify-center">
-      <div className="px-3 py-4 border rounded-md">
+      <div className="px-3 py-4 border rounded-md transform">
         <h1 className="font-semibold text-sm text-center">
           {isRegisterScreen ? "Create a new account" : "Login"}
         </h1>

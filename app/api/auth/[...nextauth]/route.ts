@@ -3,57 +3,11 @@ import GoogleProvider from "next-auth/providers/google";
 import CredentialsProvider from "next-auth/providers/credentials";
 import { cert } from "firebase-admin/app";
 import { signInWithEmailAndPassword } from "firebase/auth";
-import { auth, db } from "../../../firebase";
 import { FirestoreAdapter } from "@auth/firebase-adapter";
 import { doc, getDoc } from "firebase/firestore";
 
-const GOOGLE_AUTHORIZATION_URL =
-  "https://accounts.google.com/o/oauth2/v2/auth?" +
-  new URLSearchParams({
-    prompt: "consent",
-    access_type: "offline",
-    response_type: "code",
-  });
-
-async function refreshAccessToken(token: any) {
-  try {
-    const url =
-      "https://oauth2.googleapis.com/token?" +
-      new URLSearchParams({
-        client_id: process.env.GOOGLE_CLIENT_ID!,
-        client_secret: process.env.GOOGLE_CLIENT_SECRET!,
-        grant_type: "refresh_token",
-        refresh_token: token.refreshToken,
-      });
-
-    const response = await fetch(url, {
-      headers: {
-        "Content-Type": "application/x-www-form-urlencoded",
-      },
-      method: "POST",
-    });
-
-    const refreshedTokens = await response.json();
-
-    if (!response.ok) {
-      throw refreshedTokens;
-    }
-
-    return {
-      ...token,
-      accessToken: refreshedTokens.access_token,
-      accessTokenExpires: Date.now() + refreshedTokens.expires_in * 1000,
-      refreshToken: refreshedTokens.refresh_token ?? token.refreshToken, // Fall back to old refresh token
-    };
-  } catch (error) {
-    console.log(error);
-
-    return {
-      ...token,
-      error: "RefreshAccessTokenError",
-    };
-  }
-}
+import { auth, db } from "../../../helpers/firebase";
+import { GOOGLE_AUTHORIZATION_URL, refreshAccessToken } from "../../../helpers";
 
 export const authOptions: AuthOptions = {
   secret: process.env.NEXTAUTH_SECRET,
@@ -105,8 +59,9 @@ export const authOptions: AuthOptions = {
         const userSnap = await getDoc(userRef);
 
         if (userSnap.exists()) {
+          // This is only required for credentials login
           const dbUser = userSnap.data();
-          console.log("DB USER HERE", dbUser);
+          console.log("DB user", dbUser);
           token.name = dbUser.name; // Adding name to the user session
         }
       }
@@ -116,7 +71,7 @@ export const authOptions: AuthOptions = {
         return token;
       }
 
-      // Access token has expired, try to update it
+      // Access token has expired, update it
       return refreshAccessToken(token);
     },
     async session({ session, token }: any) {
