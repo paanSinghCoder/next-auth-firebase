@@ -113,7 +113,7 @@ const Login = () => {
               type="text"
               required
               placeholder="Enter Name"
-              className="border rounded-md text-sm px-3 py-2"
+              className="border rounded-md text-sm px-3 py-2 focus:outline-none focus:ring-0 focus:ring-offset-0"
             />
           )}
           <input
@@ -122,7 +122,7 @@ const Login = () => {
             type="email"
             required
             placeholder="Enter Email"
-            className="border rounded-md text-sm px-3 py-2"
+            className="border rounded-md text-sm px-3 py-2 focus:outline-none focus:ring-0 focus:ring-offset-0"
           />
           <input
             value={creds.password}
@@ -130,7 +130,7 @@ const Login = () => {
             onChange={(e) => setCreds({ ...creds, password: e.target.value })}
             type="password"
             placeholder="Enter Password"
-            className="border rounded-md text-sm px-3 py-2"
+            className="border rounded-md text-sm px-3 py-2 focus:outline-none focus:ring-0 focus:ring-offset-0"
           />
           <button
             disabled={
@@ -138,7 +138,7 @@ const Login = () => {
               !creds.password.trim() ||
               (isRegisterScreen && !creds.name.trim())
             }
-            className="text-sm bg-cyan-700 rounded-md text-white py-2 hover:bg-cyan-800 disabled:bg-slate-200 disabled:text-gray-400"
+            className="text-sm bg-cyan-700 rounded-md text-white py-2 hover:bg-cyan-800 disabled:bg-slate-200 disabled:text-gray-400 focus:outline-none focus:ring-0 focus:ring-offset-0"
             type="submit"
           >
             {isRegisterScreen ? "Register" : "Login"}
